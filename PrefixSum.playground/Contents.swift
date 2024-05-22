@@ -104,5 +104,84 @@ func equilibiriumIndex(A:[Int]) -> Int{
     
 }
 
-var output = [-7, 1, 5, 2, -4, 3, 0]
-print(equilibiriumIndex(A: output))
+//var output = [-7, 1, 5, 2, -4, 3, 0]
+//print(equilibiriumIndex(A: output))
+
+/*
+ You are given an array A of length N and Q queries given by the 2D array B of size Q×2.
+
+ Each query consists of two integers B[i][0] and B[i][1].
+
+ For every query, your task is to find the count of even numbers in the range from A[B[i][0]] to A[B[i][1]].
+ */
+
+func countOfEvens(A:inout[Int], B:[[Int]]) -> [Int] {
+    
+    //1. convert even numbers to 1 & odd to zero
+    for i in 0...A.count - 1{
+        if (A[i] % 2 == 0){
+            A[i] = 1
+        }else{
+            A[i] = 0
+        }
+    }
+    
+    //2. create prefix sum arr
+    for j in 1...A.count-1{
+        let sum = A[j - 1] + A[j]
+        A[j] = sum
+    }
+    
+    //3. Range sum query
+    var result = [Int]()
+    for k in B{
+        let leftIndex = k.first!
+        let rightIndex = k.last!
+        let sum = leftIndex == 0 ? A[rightIndex] : A[rightIndex] - A[leftIndex - 1]
+        result.append(sum)
+    }
+    
+    //print(A)
+    return result
+}
+
+var A = [1, 2, 3, 4, 5]
+var B = [   [0, 2],
+            [2, 4],
+            [1, 4]   ]
+
+var C = [2, 1, 8, 3, 9, 6]
+var D = [   [0, 3],
+        [3, 5],
+        [1, 3],
+        [2, 4]   ]
+//print(countOfEvens(A: &C, B: D))
+
+
+/*
+ Given the prefix sum of an array, prefSum = [-2, 4, 1, 5, 2]
+
+ What is the sum of the original array from index 0 to 2 (0-based) ?
+ */
+
+func originalSum(A:[Int], Q:[Int]) -> Int{
+    var O = [A[0]]
+    for i in 1...A.count-1{
+       // print("\(A[i]) - \(O[i - 1])")
+        let sub =   A[i] - A[i - 1]
+        O.append(sub)
+    }
+    
+
+    var sum = 0
+    for j in 0...2{
+         sum += O[j]
+    }
+    
+    
+  
+    return sum
+}
+
+var output = [-2, 4, 1, 5, 2]
+print(originalSum(A: output, Q: [0,2]))
