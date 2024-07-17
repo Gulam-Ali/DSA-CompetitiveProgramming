@@ -41,17 +41,45 @@ func getMinSwaps(A: [Int], B:Int) -> Int {
         }
     }
     
+    //calculate bad elements (number which are greater then B)
+    var badElements = 0
+    for i in 0..<numbersLessThenB{
+        if A[i] > B{
+            badElements += 1
+        }
+    }
+    
     //make a window size of numbersLessThenB
-    var s = 0
+    var s = 1
     var e = numbersLessThenB
-    var ans = 0
+    var ans = badElements
+        /*
+         0. Initalize the answer with same as badElement count for first window
+         1. check if removed element was greter then B, decrement badelement count
+         2. check if added element is greated then B, Increment badElement count
+         3. If in any iteration if badElement count is less then current answer, update answer
+         Note: we are finding the window in which less number of badelement are there, that would be the minimum swap in order
+         to make all elements together
+         */
     while(e < A.count){
+        if A[s-1] > B{
+            badElements -= 1
+        }
+        if A[e] > B{
+            badElements += 1
+        }
         
+        if badElements < ans{
+            ans = badElements
+        }
+       
+        s += 1
+        e += 1
     }
     
     return ans
 }
 
-let A = [1, 12, 10, 3, 14, 10, 5]
-let B = 8
+let A = [19,11,3,9,7,25,6,20,4]
+let B = 10
 print(getMinSwaps(A: A, B: B))
